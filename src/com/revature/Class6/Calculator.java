@@ -1,41 +1,58 @@
 package com.revature.Class6;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Calculator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        double firstNumber = 0;
-        double secondNumber = 0;
+        double firstNumber;
+        double secondNumber;
         double result = 0;
-        int option = 0;
-        boolean flag = false;
-        while(!flag) {
-            System.out.println("Enter First Number");
-            if (scanner.hasNextDouble()) {
-                firstNumber = scanner.nextDouble();
-                flag = true;
-            }
-            else {
-                scanner.nextLine();
-                System.out.println("Invalid number input.");
-            }
-        }
-        flag = false;
-        while(!flag) {
-            System.out.println("Enter Second Number");
-            if (scanner.hasNextDouble()) {
-                secondNumber = scanner.nextDouble();
-                flag = true;
-            }
-            else {
-                scanner.nextLine();
-                System.out.println("Invalid number input.");
-            }
+        int option;
+        firstNumber = getDoubleFromInput(scanner, "Enter First Number");
+        secondNumber = getDoubleFromInput(scanner, "Enter Second Number");
+        option = getOption(scanner, secondNumber);
+        System.out.println("Output");
+
+        switch (option) {
+            case 1 -> result = firstNumber + secondNumber;
+            case 2 -> result = firstNumber - secondNumber;
+            case 3 -> result = firstNumber * secondNumber;
+            case 4 -> result = firstNumber / secondNumber;
         }
 
-        while(!Arrays.asList(1, 2, 3, 4).contains(option)){
+        if(Double.isInfinite(result)){
+            System.out.println("Result: " + "Double data type limit exceeded.");
+        }
+        else
+            System.out.println("Result: " + result);
+
+
+    }
+
+    public static double getDoubleFromInput(Scanner scanner, String msg){
+        boolean flag = false;
+        double ret = 0;
+        while(!flag) {
+            System.out.println(msg);
+            if (scanner.hasNextDouble()) {
+                ret = scanner.nextDouble();
+                flag = true;
+            }
+            else {
+                scanner.nextLine();
+                System.out.println("Invalid number input.");
+            }
+        }
+        return ret;
+    }
+
+    public static int getOption(Scanner scanner, double dividend){
+        int option = 0;
+        List<Integer> options = Arrays.asList(1,2,3,4);
+        while(!options.contains(option)){
             System.out.println("""
                     Select Option:
                     1 - Add
@@ -47,21 +64,11 @@ public class Calculator {
                 option = scanner.nextInt();
             if(!Arrays.asList(1, 2, 3, 4).contains(option))
                 System.out.println("That wasn't a valid input!");
-            if(option == 4 && secondNumber == 0){
+            if(option == 4 && dividend == 0){
+                System.out.println("Can't Divide By Zero!");
                 option = 0;
-                System.out.println("Can't divide when second number is 0.");
             }
         }
-
-        System.out.println("Output");
-        switch (option) {
-            case 1 -> result = firstNumber + secondNumber;
-            case 2 -> result = firstNumber - secondNumber;
-            case 3 -> result = firstNumber * secondNumber;
-            case 4 -> result = firstNumber / secondNumber;
-        }
-        System.out.println("Result: " + result);
-
-
+        return option;
     }
 }
